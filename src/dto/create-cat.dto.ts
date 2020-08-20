@@ -1,14 +1,4 @@
-import { Injectable } from '@nestjs/common';
-import {IsString, IsInt, MinLength, MaxLength, }  from 'class-validator';
-
-@Injectable()
-export class AppService {
-  getHello(params): string {
-    console.log(params);
-    return 'this is all cats list';
-  }
-}
-
+import { IsInt, IsString, MaxLength, MinLength } from 'class-validator';
 
 export class CreateCatDto {
   @IsString()
