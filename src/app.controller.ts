@@ -1,27 +1,28 @@
 import { Controller, Get, Req, HttpCode, Header, Redirect, Param,HostParam, Post, Body } from '@nestjs/common';
-import { AppService, CreateCatDto } from './app.service';
+import { AppService } from './app.service';
+import {CatsService} from './cats/cats.service';
+import {CatInterface} from './cats/interfaces/cat.interface';
 import {Request} from 'express';
 
 @Controller('cats/all')
 export class AppController {
-  constructor(private readonly appService: AppService) {}
-  @Get(':id')
+  constructor(
+    // 注入 provider
+    private readonly appService: AppService,
+    private readonly catsService: CatsService
+  ) {}
+  @Get()
+  // @Redirect注解可以使前端重定向到一个网页  使用场景：跳转登陆
   // @Redirect('https://www.baidu.com', 302)
+  //  配置响应头header
   @Header('X-Powered-By', 'chentao')
   getAllCats(@Param('id') params): string {
     return this.appService.getHello('xxx') + `${params}`;
   }
 
-}
-
-@Controller('cats/add')
-export class CatsController {
-  constructor(private readonly catsService: AppService) {}
-  @Post()
-  create(@Body() createCatDto: CreateCatDto) {
-    console.log(createCatDto);
-    this.catsService.getHello(createCatDto);
-    return 'This action adds a new cat';
+  @Get('catService')
+  async getCatService(): Promise<CatInterface[]> {
+    return this.catsService.findAll()
   }
 }
 
@@ -30,7 +31,6 @@ export class CatsController {
 export class AccountController {
   @Get()
   getInfo(@HostParam('account') account: string) {
-
     return account;
   }
 }
