@@ -1,4 +1,5 @@
-import { Controller, Get, Post, Body, HttpException, HttpStatus, UseFilters, UsePipes } from '@nestjs/common';
+import { Controller, Get, Post, Body, HttpException, HttpStatus, UseFilters, UseInterceptors,
+  UsePipes } from '@nestjs/common';
 import { CreateCatDto } from './dto/create-cat.dto';
 import { CatsService } from './cats.service';
 import { CatInterface } from './interfaces/cat.interface';
@@ -6,6 +7,7 @@ import {HttpExceptionFiler} from './http-exception.filer';
 import {ForbiddenException} from './forbidden.exception';
 import { AllExceptionsFilter } from './any-exception.filter';
 import { ValidationPipe} from './validate.pipe';
+import {LoggingInterceptor} from './logging.intercept';
 
 @Controller('cats')
 export class CatsController {
@@ -14,7 +16,10 @@ export class CatsController {
   @Post()
   // 捕获指定异常
   // @UseFilters(AllExceptionsFilter)
+  // 绑定管道 用于验证传参
   @UsePipes(ValidationPipe)
+  // 绑定拦截器
+  @UseInterceptors(LoggingInterceptor)
   async create(@Body() createCatDto: CreateCatDto) {
     // throw new AllExceptionsFilter();
     // console.log('body',createCatDto);
