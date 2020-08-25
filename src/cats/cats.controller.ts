@@ -8,6 +8,7 @@ import {ForbiddenException} from './forbidden.exception';
 import { AllExceptionsFilter } from './any-exception.filter';
 import { ValidationPipe} from './validate.pipe';
 import {LoggingInterceptor} from './logging.intercept';
+import { TransformInterceptor } from './transform.interceptor';
 
 @Controller('cats')
 export class CatsController {
@@ -19,7 +20,7 @@ export class CatsController {
   // 绑定管道 用于验证传参
   @UsePipes(ValidationPipe)
   // 绑定拦截器
-  @UseInterceptors(LoggingInterceptor)
+  // @UseInterceptors(TransformInterceptor)
   async create(@Body() createCatDto: CreateCatDto) {
     // throw new AllExceptionsFilter();
     // console.log('body',createCatDto);
@@ -27,13 +28,14 @@ export class CatsController {
   }
 
   @Get()
+  // @UseInterceptors(TransformInterceptor)
   async findAll(): Promise<CatInterface[]> {
-    // return this.catsSerivce.findAll()
+    return this.catsSerivce.findAll()
     // 异常
     // throw new HttpException('Forbidden', HttpStatus.FORBIDDEN)
-    throw new HttpException({
-      status: HttpStatus.FORBIDDEN,
-      error: 'this is a custom message'
-    }, HttpStatus.FORBIDDEN)
+    // throw new HttpException({
+    //   status: HttpStatus.FORBIDDEN,
+    //   error: 'this is a custom message'
+    // }, HttpStatus.FORBIDDEN)
   }
 }

@@ -8,10 +8,10 @@ import { LoggingInterceptor } from './logging.intercept';
   controllers: [CatsController],
   providers: [
     CatsService,
-    {
-      provide: APP_INTERCEPTOR,
-      useClass: LoggingInterceptor
-    }
+    // {
+    //   provide: APP_INTERCEPTOR,
+    //   useClass: LoggingInterceptor
+    // }
   ],
   // 放入export后 就可以几个模块之间共享CatsService实例
   exports: [CatsService]
